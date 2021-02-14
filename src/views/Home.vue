@@ -1,21 +1,50 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <Form />
+    <Table :items="items" v-on:modify="modifyItem"/>
+    <Form :item="modified_item" v-on:refresh="refresh"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import Form from '@/components/Form.vue'
+import Table from '@/components/Table.vue'
+import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
-    Form
+    Form,
+    Table
+  },
+  data () {
+    return {
+      items: null,
+      modified_item: null
+    }
+  },
+  methods: {
+    modifyItem: function (item) {
+      this.modified_item = item
+    },
+    refresh: function () {
+      axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
+        this.items = response.data
+      })
+    }
+  },
+  mounted () {
+    axios
+      .get('http://test01.varid.pl:4080/api/contacts')
+      .then(response => {
+        this.items = response.data
+      })
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      // eslint-disable-next-line no-return-assign
+      .finally(() => this.loading = false)
   }
 }
 </script>

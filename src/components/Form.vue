@@ -25,11 +25,11 @@
         ></b-form-input>
       </b-form-group>
 
-    <b-form-group id="input-group-2" label="Your lastname:" label-for="input-2">
+    <b-form-group id="input-group-2" label="Your last_name:" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.lastname"
-          placeholder="Enter lastname"
+          v-model="form.last_name"
+          placeholder="Enter last_name"
           required
         ></b-form-input>
       </b-form-group>
@@ -37,7 +37,7 @@
           <b-form-group id="input-group-2" label="Your number:" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.number"
+          v-model="form.phone_number"
           placeholder="Enter number"
           required
         ></b-form-input>
@@ -52,11 +52,11 @@
         ></b-form-input>
       </b-form-group>
 
-          <b-form-group id="input-group-2" label="Your adress:" label-for="input-2">
+          <b-form-group id="input-group-2" label="Your address:" label-for="input-2">
         <b-form-input
           id="input-2"
-          v-model="form.adress"
-          placeholder="Enter adress"
+          v-model="form.address"
+          placeholder="Enter address"
           required
         ></b-form-input>
       </b-form-group>
@@ -82,17 +82,25 @@
 // name, last name, phone number, email, country, city, address
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Form',
+  props: {
+    item: {
+      type: Object,
+      default: null
+    }
+  },
   data () {
     return {
       form: {
         email: '',
         name: '',
-        lastname: '',
-        number: '',
+        last_name: '',
+        phone_number: '',
         country: '',
-        adress: '',
+        address: '',
         city: ''
       },
       show: true
@@ -108,16 +116,32 @@ export default {
       // Reset our form values
       this.form.email = ''
       this.form.name = ''
-      this.form.lastname = ''
-      this.form.number = ''
+      this.form.last_name = ''
+      this.form.phone_number = ''
       this.form.country = ''
-      this.form.adress = ''
+      this.form.address = ''
       this.form.city = ''
       // Trick to reset/clear native browser form validation state
       this.show = false
       this.$nextTick(() => {
         this.show = true
       })
+    },
+    modifyData () {
+      axios.post('', this.form).then(response => {
+        this.$emit('refresh')
+      })
+    }
+  },
+  watch: {
+    item: function () {
+      this.form.email = this.item.email
+      this.form.name = this.item.name
+      this.form.last_name = this.item.last_name
+      this.form.phone_number = this.item.phone_number
+      this.form.country = this.item.country
+      this.form.address = this.item.address
+      this.form.city = this.item.city
     }
   }
 }
