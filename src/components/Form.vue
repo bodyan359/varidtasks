@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form @submit="postData" @modify="onReset" v-if="show">
       <b-form-group
         id="input-group-1"
         label="Email address:"
@@ -71,7 +71,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary">Add new item</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="modify" variant="danger">Modify</b-button>
     </b-form>
     <b-card class="mt-3" header="Form Data Result">
       <pre class="m-0">{{ form }}</pre>
@@ -110,6 +110,17 @@ export default {
     onSubmit (event) {
       event.preventDefault()
       alert(JSON.stringify(this.form))
+    },
+    postData () {
+      axios.post('http://test01.varid.pl:4080/api/contact', this.form)
+        .then(async response => {
+          await axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
+            this.items = response.data
+          })
+        })
+        .catch(function (error) {
+          alert(error)
+        })
     },
     onReset (event) {
       event.preventDefault()

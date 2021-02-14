@@ -39,9 +39,8 @@ export default {
     },
     deleteData: function (id) {
       axios.delete('http://test01.varid.pl:4080/api/contact/delete/' + id)
-        .then(response => {
-          // eslint-disable-next-line no-return-assign
-          axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
+        .then(async response => {
+          await axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
             this.items = response.data
           })
         })
