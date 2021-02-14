@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form @submit="postData" @modify="onReset" v-if="show">
+    <b-form @submit="postData" @modify="putData" v-if="show">
       <b-form-group
         id="input-group-1"
         label="Email address:"
@@ -107,12 +107,19 @@ export default {
     }
   },
   methods: {
-    onSubmit (event) {
-      event.preventDefault()
-      alert(JSON.stringify(this.form))
-    },
     postData () {
       axios.post('http://test01.varid.pl:4080/api/contact', this.form)
+        .then(async response => {
+          await axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
+            this.items = response.data
+          })
+        })
+        .catch(function (error) {
+          alert(error)
+        })
+    },
+    putData () {
+      axios.put('http://test01.varid.pl:4080/api/contact', this.form)
         .then(async response => {
           await axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
             this.items = response.data
