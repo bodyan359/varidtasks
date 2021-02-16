@@ -20,10 +20,7 @@ import axios from 'axios'
 export default {
   name: 'Table',
   props: {
-    items: {
-      type: Array,
-      default: null
-    }
+    items: null
   },
   data () {
     return {
@@ -39,11 +36,14 @@ export default {
     },
     deleteData: function (id) {
       axios.delete('http://test01.varid.pl:4080/api/contact/delete/' + id)
-        .then(async response => {
-          await axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
-            this.items = response.data
+        .then(
+          axios.get('http://test01.varid.pl:4080/api/contacts').then(response => {
+            // eslint-disable-next-line no-unused-vars
+            let newData = this.items
+            newData = response.data
+            this.$emit('refresh', newData)
           })
-        })
+        )
     }
   }
 }

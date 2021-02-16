@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Table :items="items" v-on:modify="modifyItem"/>
+    <Table :items="items" v-on:modify="modifyItem" v-on:refresh="refresh"/>
     <Form :item="modified_item" v-on:refresh="refresh"/>
   </div>
 </template>
